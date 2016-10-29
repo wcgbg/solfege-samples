@@ -153,7 +153,7 @@ void MakeGig(const vector<string> &filenames) {
   }
 
   // save file as of now
-  file.Save("foo.gig");
+  file.Save("solfege.gig");
   for (int pitch = 0; pitch < 128; pitch++) {
     for (auto &solfege_and_note : notes[pitch]) {
       auto &note = solfege_and_note.second;
