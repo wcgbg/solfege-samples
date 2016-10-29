@@ -86,7 +86,7 @@ vector<int16_t> Note::LoadSamples() const {
     throw std::runtime_error("Cannot open file: " + filename_);
   }
   if (info.channels == 1 && (info.format & SF_FORMAT_PCM_16)
-      && info.samplerate == 48000) {
+      && info.samplerate == 44100) {
     static_assert(sizeof(short) == 2, "Size doesn't match");
     vector<int16_t> samples(info.frames);
     sf_read_short(file, (short *) samples.data(), samples.size());
@@ -125,7 +125,7 @@ void MakeGig(const vector<string> &filenames) {
     gig_sample->Channels = 1; // mono
     gig_sample->BitDepth = 16; // 16 bits
     gig_sample->FrameSize = 16/*bitdepth*// 8/*1 byte are 8 bits*/* 1/*mono*/;
-    gig_sample->SamplesPerSecond = 48000;
+    gig_sample->SamplesPerSecond = 44100;
     gig_sample->MIDIUnityNote = note.pitch();
     gig_sample->Resize(note.LoadSamples().size());
     notes[note.pitch()][note.solfege()] = note;
