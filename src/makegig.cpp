@@ -1,6 +1,8 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <libgig/gig.h>
+#include <sndfile.h>
+
 #include <cstdint>
 #include <vector>
 #include <string>
@@ -23,6 +25,7 @@ public:
   Note();
   Note(const string &filename, gig::Sample *gig_sample);
   vector<int16_t> LoadSamples() const;
+  size_t NumOfSamples() const;
   int pitch() const;
   gig::Sample *gig_sample() const;
   string name() const;
@@ -75,6 +78,40 @@ string Note::solfege() const {
   return solfege_;
 }
 
+vector<int16_t> Note::LoadSamples() const {
+  SF_INFO info;
+  SNDFILE *file;
+  file = sf_open(filename_.c_str(), SFM_READ, &info);
+  if (file == nullptr) {
+    throw std::runtime_error("Cannot open file: " + filename_);
+  }
+  if (info.channels == 1 && (info.format & SF_FORMAT_PCM_16)
+      && info.samplerate == 48000) {
+    static_assert(sizeof(short) == 2, "Size doesn't match");
+    vector<int16_t> samples(info.frames);
+    sf_read_short(file, (short *) samples.data(), samples.size());
+    sf_close(file);
+    return samples;
+  } else {
+    sf_close(file);
+    cout << info.channels << endl;
+    cout << info.format << endl;
+    cout << info.samplerate << endl;
+    throw std::runtime_error("Unexpected format: " + filename_);
+  }
+}
+
+size_t Note::NumOfSamples() const {
+  SF_INFO info;
+  SNDFILE *file;
+  file = sf_open(filename_.c_str(), SFM_READ, &info);
+  if (file == nullptr) {
+    throw std::runtime_error("Cannot open file: " + filename_);
+  }
+  sf_close(file);
+  return info.frames;
+}
+
 void MakeGig(const vector<string> &filenames) {
   gig::File file;
   // we give it an internal name, not mandatory though
@@ -82,15 +119,15 @@ void MakeGig(const vector<string> &filenames) {
 
   unordered_map<string, Note> notes[128];
   for (auto &filename : filenames) {
-    gig::Sample *sample = file.AddSample();
-    Note note = Note(filename, sample);
-    sample->pInfo->Name = note.name();
-    sample->Channels = 1; // mono
-    sample->BitDepth = 16; // 16 bits
-    sample->FrameSize = 16/*bitdepth*// 8/*1 byte are 8 bits*/* 1/*mono*/;
-    sample->SamplesPerSecond = 44100;
-    sample->MIDIUnityNote = note.pitch();
-    sample->Resize(3);
+    gig::Sample *gig_sample = file.AddSample();
+    Note note = Note(filename, gig_sample);
+    gig_sample->pInfo->Name = note.name();
+    gig_sample->Channels = 1; // mono
+    gig_sample->BitDepth = 16; // 16 bits
+    gig_sample->FrameSize = 16/*bitdepth*// 8/*1 byte are 8 bits*/* 1/*mono*/;
+    gig_sample->SamplesPerSecond = 48000;
+    gig_sample->MIDIUnityNote = note.pitch();
+    gig_sample->Resize(note.LoadSamples().size());
     notes[note.pitch()][note.solfege()] = note;
   }
 
@@ -117,11 +154,13 @@ void MakeGig(const vector<string> &filenames) {
 
   // save file as of now
   file.Save("foo.gig");
-//  for (int pitch = 0; pitch < 128; pitch++) {
-//    for (auto &solfege_and_note : notes[pitch]) {
-//      solfege_and_note.second.gig_sample()->Write(sampleData1, 3);
-//    }
-//  }
+  for (int pitch = 0; pitch < 128; pitch++) {
+    for (auto &solfege_and_note : notes[pitch]) {
+      auto &note = solfege_and_note.second;
+      auto samples = note.LoadSamples();
+      note.gig_sample()->Write(samples.data(), samples.size());
+    }
+  }
 }
 
 pair<bool, vector<string>> ls(const string &dir, const regex &filename_regex) {
