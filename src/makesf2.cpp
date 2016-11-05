@@ -13,9 +13,17 @@ using namespace sf2cute;
 void MakeSf2(const vector<string> &filenames) {
   SoundFont sf2;
 
+  // Meta data
   sf2.set_sound_engine("EMU8000");
   sf2.set_bank_name("Solfege");
-  sf2.set_rom_name("ROM");
+  sf2.set_copyright(
+      "GPL v3\n"
+          "The \"source code\" means this sound font including all the samples in it. "
+          "The modified source versions include the sound fonts (in any format) and synthesizers that use the samples here, "
+          "but doesn't include the music created by them.");
+  sf2.set_engineers("Chengu Wang");
+  sf2.set_comment("https://github.com/wcgbg/solfege-samples\n"
+      "Acknowledgment: https://github.com/gocha/sf2cute, Alter/Ego");
 
   // Add samples
   unordered_map<string, pair<Note, shared_ptr<SFSample>>> notes[128];
@@ -41,8 +49,6 @@ void MakeSf2(const vector<string> &filenames) {
     SFInstrumentZone instrument_zone(sample);
     instrument_zone.SetGenerator(
         { SFGenerator::kKeyRange, RangesType(note.pitch(), note.pitch()) });
-//    instrument_zone.SetGenerator(
-//        { SFGenerator::kSampleModes, uint16_t(SampleMode::kNoLoop) });
     instrument->AddZone(move(instrument_zone));
   }
 
