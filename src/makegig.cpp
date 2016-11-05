@@ -25,7 +25,7 @@ void MakeGig(const vector<string> &filenames) {
     gig_sample->FrameSize = 16/*bitdepth*// 8/*1 byte are 8 bits*/* 1/*mono*/;
     gig_sample->SamplesPerSecond = 44100;
     gig_sample->MIDIUnityNote = note.pitch();
-    gig_sample->Resize(note.LoadSamples().size());
+    gig_sample->Resize(note.NumOfSamples());
     notes[note.pitch()][note.solfege()] = {note,gig_sample};
   }
 
