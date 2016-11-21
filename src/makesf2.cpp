@@ -1,6 +1,7 @@
 #include <memory>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 #include <sf2cute.hpp>
 
@@ -23,7 +24,7 @@ void MakeSf2(const vector<string> &filenames) {
           "but doesn't include the music created by them.");
   sf2.set_engineers("Chengu Wang");
   sf2.set_comment("https://github.com/wcgbg/solfege-samples\n"
-      "Acknowledgment: https://github.com/gocha/sf2cute, Alter/Ego");
+      "Acknowledgment: https://github.com/gocha/sf2cute");
 
   // Add samples
   unordered_map<string, pair<Note, shared_ptr<SFSample>>> notes[128];
@@ -38,6 +39,10 @@ void MakeSf2(const vector<string> &filenames) {
   const string solfege_in_octave[12] = { "do", "ga", "re", "nu", "mi", "fa",
       "jur", "so", "ki", "la", "pe", "ti" };
   auto instrument = sf2.NewInstrument("Sotorrio");
+  SFInstrumentZone global_zone;
+  global_zone.SetGenerator(
+      { SFGenerator::kReleaseVolEnv, int16_t(1200 * log2(.8)) }); // 0.8 sec
+  instrument->set_global_zone(global_zone);
   for (int pitch = 0; pitch < 128; pitch++) {
     auto &solfege = solfege_in_octave[pitch % 12];
     auto it = notes[pitch].find(solfege);
