@@ -1,8 +1,8 @@
 # Solfege Samples
-Solfege sound files in sound font (sf2) and Gigasample (gig) format.
+Solfege sound files in sound font (sf2) and Gigasample (gig) format. It's useful for ear training.
 
 ## Katy (female)
-Katy sound files are generated from [Katy samples](https://www.freesound.org/people/digifishmusic/packs/2576/). The voice is very nice, but there are only 8 notes: do (C4), re, mi, fa, so, la, ti, do (C5).
+Built from [Katy's samples](https://www.freesound.org/people/digifishmusic/packs/2576/). Her voice is very nice, but there are only 8 notes: do (C4), re, mi, fa, so, la, ti, do (C5).
 
 **Sample song**
 * [Twinkle twinkle little star](https://wcgbg.github.io/solfege-samples/samples/katy/songs/twinkle.ogg)
@@ -12,7 +12,7 @@ Katy sound files are generated from [Katy samples](https://www.freesound.org/peo
 * [gig](https://wcgbg.github.io/solfege-samples/samples/katy/solfege-katy.gig)
 
 # Alter/Ego + Daisy (female)
-[Alter/Ego](http://www.plogue.com/products/alterego) is a singing synthesizer. Daisy is a voice bank. The voice is less natural, but with perfect pitch and wide pitch range.
+[Alter/Ego](http://www.plogue.com/products/alterego) is a singing synthesizer. Daisy is a voice bank. Her voice is less natural, but with perfect pitch and wide pitch range.
 
 It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Sotorrio-17) solfege: do, ga, re, nu, mi, fa, jur, so, ki, la, pe, ti, ranging from C1 to B8.
 
