@@ -1,12 +1,14 @@
+#include "note.hpp"
+
 #include <dirent.h>
 #include <sndfile.h>
 #include <iostream>
 
-#include "note.h"
-
 using namespace std;
 
-const regex Note::filename_regex("(.*/)?note([[:digit:]]{3})-([a-z]+)\\.wav");
+const regex Note::kPathRegex("(.*/)?note([[:digit:]]{3})-([a-z]+)\\.wav");
+const regex Note::kFilenameRegex("note[[:digit:]]{3}-[a-z]+\\.wav");
+const int Note::kSampleRate = 44100;
 
 Note::Note() :
     pitch_(-1) {
@@ -15,7 +17,7 @@ Note::Note() :
 Note::Note(const string &filename) :
     filename_(filename), pitch_(-1) {
   smatch match;
-  if (!regex_match(filename, match, filename_regex)) {
+  if (!regex_match(filename, match, kPathRegex)) {
     throw invalid_argument("Unknown filename format: " + filename);
   }
   pitch_name_ = match[2];
@@ -48,6 +50,7 @@ string Note::solfege() const {
 }
 
 vector<int16_t> Note::LoadSamples() const {
+  Validate();
   SF_INFO info;
   SNDFILE *file;
   file = sf_open(filename_.c_str(), SFM_READ, &info);
@@ -55,7 +58,7 @@ vector<int16_t> Note::LoadSamples() const {
     throw std::runtime_error("Cannot open file: " + filename_);
   }
   if (info.channels == 1 && (info.format & SF_FORMAT_PCM_16)
-      && info.samplerate == 44100) {
+      && info.samplerate == kSampleRate) {
     static_assert(sizeof(short) == 2, "Size doesn't match");
     vector<int16_t> samples(info.frames);
     sf_read_short(file, (short *) samples.data(), samples.size());
@@ -71,6 +74,7 @@ vector<int16_t> Note::LoadSamples() const {
 }
 
 size_t Note::NumOfSamples() const {
+  Validate();
   SF_INFO info;
   SNDFILE *file;
   file = sf_open(filename_.c_str(), SFM_READ, &info);
@@ -81,13 +85,12 @@ size_t Note::NumOfSamples() const {
   return info.frames;
 }
 
-pair<bool, vector<string>> ls(const string &dir, const regex &filename_regex) {
+vector<string> ListFiles(const string &dir, const regex &filename_regex) {
   DIR *dp;
   struct dirent *dirp;
   if ((dp = opendir(dir.c_str())) == nullptr) {
-    return {false, {}};
+    throw runtime_error("cannot open directory: " + dir);
   }
-
   vector<string> files;
   while ((dirp = readdir(dp)) != nullptr) {
     if (regex_match(dirp->d_name, filename_regex)) {
@@ -95,5 +98,5 @@ pair<bool, vector<string>> ls(const string &dir, const regex &filename_regex) {
     }
   }
   closedir(dp);
-  return {true, files};
+  return files;
 }

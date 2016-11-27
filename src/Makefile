@@ -1,19 +1,28 @@
-all:makegig makesf2
+CC = g++
+CFLAGS = -Wall -std=c++11 -I../../sf2cute/include/ -O0 -g
+LDFLAGS = -lsndfile -L../../sf2cute/ -lsf2cute -L/usr/local/lib/libgig/ -lgig
+SRCS = $(wildcard *.cpp)
+OBJS = $(patsubst %.cpp, %.o, $(SRCS))
+DEPS = $(patsubst %.o, %.d, $(OBJS))
 
-makegig:makegig.o note.o
-	g++ -o makegig makegig.o note.o -L/usr/local/lib/libgig/ -lgig -lsndfile
+all:katy daisy chengu
 
-makegig.o:makegig.cpp note.h
-	g++ -c -Wall -std=c++11 makegig.cpp
+KATY_OBJS = katy.o note.o sf2gigbuilder.o
+katy:$(KATY_OBJS)
+	$(CC) -o katy $(KATY_OBJS) $(LDFLAGS)
 
-makesf2:makesf2.o note.o
-	g++ -o makesf2 makesf2.o note.o -lsndfile -L../../sf2cute/ -l sf2cute
+DAISY_OBJS = daisy.o note.o sf2gigbuilder.o
+daisy:$(DAISY_OBJS)
+	$(CC) -o daisy $(DAISY_OBJS) $(LDFLAGS)
 
-makesf2.o:makesf2.cpp note.h
-	g++ -c -Wall -std=c++11 makesf2.cpp -I../../sf2cute/include/
+CHENGU_OBJS = chengu.o note.o sf2gigbuilder.o
+chengu:$(CHENGU_OBJS)
+	$(CC) -o chengu $(CHENGU_OBJS) $(LDFLAGS)
 
-note.o:note.cpp note.h
-	g++ -c -Wall -std=c++11 note.cpp
+-include $(DEPS)
+
+%.o: %.cpp
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	-rm *.o makegig makesf2
+	-rm *.o katy daisy chengu
