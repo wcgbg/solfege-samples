@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -I../../sf2cute/include/ -O0 -g
+CFLAGS = -Wall -std=c++11 -I../../sf2cute/include/
 LDFLAGS = -lsndfile -L../../sf2cute/ -lsf2cute -L/usr/local/lib/libgig/ -lgig
 SRCS = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp, %.o, $(SRCS))
