@@ -13,7 +13,8 @@ using namespace std;
 using namespace sf2cute;
 
 Sf2GigBuilder::Sf2GigBuilder(const string &sample_dir) :
-    notes_(), name_(), release_vol_env_(), bank_program_to_name_solfeges_(), solfeges_union_() {
+    notes_(), name_(), release_vol_env_(), transpose_(),
+    bank_program_to_name_solfeges_(), solfeges_union_() {
   auto sample_files = ListFiles(sample_dir, Note::kFilenameRegex);
   sort(sample_files.begin(), sample_files.end());
   for (auto &sample_file : sample_files) {
@@ -36,6 +37,13 @@ void Sf2GigBuilder::SetName(const std::string& name) {
 
 void Sf2GigBuilder::SetReleaseVolEnv(double release_vol_env) {
   release_vol_env_ = release_vol_env;
+}
+
+void Sf2GigBuilder::SetTranspose(int transpose) {
+  if (transpose % 12) {
+    throw runtime_error("transpose must be a multiple of 12");
+  }
+  transpose_ = transpose;
 }
 
 void Sf2GigBuilder::BuildSf2(const string &output_filename) const {
@@ -61,7 +69,7 @@ void Sf2GigBuilder::BuildSf2(const string &output_filename) const {
       continue;
     }
     auto sample = sf2.NewSample(note.name(), note.LoadSamples(), 0, 0,
-        Note::kSampleRate, note.pitch(), 0);
+        Note::kSampleRate, note.pitch() + transpose_, 0);
     notes_and_samples.push_back( { note, sample });
   }
 
@@ -85,12 +93,13 @@ void Sf2GigBuilder::BuildSf2(const string &output_filename) const {
       if (solfeges.find(note.solfege()) == solfeges.end()) {
         continue;
       }
-      if (!pitch_set.insert(note.pitch()).second) {
+      int pitch = note.pitch() + transpose_;
+      if (!pitch_set.insert(pitch).second) {
         throw runtime_error("key already exists");
       }
       SFInstrumentZone instrument_zone(sample);
       instrument_zone.SetGenerator(
-          { SFGenerator::kKeyRange, RangesType(note.pitch(), note.pitch()) });
+          { SFGenerator::kKeyRange, RangesType(pitch, pitch) });
       instrument->AddZone(move(instrument_zone));
     }
     auto preset = sf2.NewPreset(name, program_num, bank_num);
@@ -121,7 +130,7 @@ void Sf2GigBuilder::BuildGig(const std::string& output_filename) const {
     sample->BitDepth = 16; // 16 bits
     sample->FrameSize = 16/*bitdepth*// 8/*1 byte are 8 bits*/* 1/*mono*/;
     sample->SamplesPerSecond = Note::kSampleRate;
-    sample->MIDIUnityNote = note.pitch();
+    sample->MIDIUnityNote = note.pitch() + transpose_;
     sample->Resize(note.NumOfSamples());
     notes_and_samples.push_back( { note, sample });
   }
@@ -148,14 +157,15 @@ void Sf2GigBuilder::BuildGig(const std::string& output_filename) const {
       if (solfeges.find(note.solfege()) == solfeges.end()) {
         continue;
       }
-      if (!pitch_set.insert(note.pitch()).second) {
+      int pitch = note.pitch() + transpose_;
+      if (!pitch_set.insert(pitch).second) {
         throw runtime_error("key already exists");
       }
       gig::Region* pRegion = instrument->AddRegion();
-      pRegion->SetKeyRange(note.pitch(), note.pitch());
+      pRegion->SetKeyRange(pitch, pitch);
       pRegion->SetSample(sample);
       pRegion->pDimensionRegions[0]->pSample = sample;
-      pRegion->pDimensionRegions[0]->UnityNote = note.pitch();
+      pRegion->pDimensionRegions[0]->UnityNote = note.pitch() + transpose_;
       pRegion->pDimensionRegions[0]->EG1Release = release_vol_env_;
     }
   }
