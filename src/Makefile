@@ -5,7 +5,7 @@ SRCS = $(wildcard *.cpp)
 OBJS = $(patsubst %.cpp, %.o, $(SRCS))
 DEPS = $(patsubst %.o, %.d, $(OBJS))
 
-all:katy daisy chengu
+all:katy daisy chengu jennifer
 
 KATY_OBJS = katy.o note.o sf2gigbuilder.o
 katy:$(KATY_OBJS)
@@ -19,10 +19,14 @@ CHENGU_OBJS = chengu.o note.o sf2gigbuilder.o
 chengu:$(CHENGU_OBJS)
 	$(CC) -o chengu $(CHENGU_OBJS) $(LDFLAGS)
 
+JENNIFER_OBJS = jennifer.o note.o sf2gigbuilder.o
+jennifer:$(JENNIFER_OBJS)
+	$(CC) -o jennifer $(JENNIFER_OBJS) $(LDFLAGS)
+
 -include $(DEPS)
 
 %.o: %.cpp
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	-rm *.o katy daisy chengu
+	-rm *.o katy daisy chengu jennifer
