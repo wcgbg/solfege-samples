@@ -36,3 +36,16 @@ It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Soto
 **Download**
 * [sf2](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.sf2)
 * [gig](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.gig)
+
+# Jennifer (female)
+Jennifer is the author's wife. She is an amateur singer.
+
+It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Sotorrio-17) solfege: do, ga, re, nu, mi, fa, jur, so, ki, la, pe, ti, ranging from C3 to B5.
+
+**Sample song**
+* [Twinkle twinkle little star](https://wcgbg.github.io/solfege-samples/samples/jennifer/songs/twinkle.ogg)
+* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/jennifer/songs/Minuet%20in%20G%20Major.ogg)
+
+**Download**
+* [sf2](https://wcgbg.github.io/solfege-samples/samples/jennifer/solfege-jennifer.sf2)
+* [gig](https://wcgbg.github.io/solfege-samples/samples/jennifer/solfege-jennifer.gig)
