@@ -1,6 +1,9 @@
 #!/bin/bash
 
-out="/tmp/$(basename "$2" .mid).wav"
+if [ -z "$3" ]; then
+  out="/tmp/$(basename "$2" .mid).wav"
+else
+  out="/tmp/$(basename "$2" .mid).$3.wav"
+fi
 
-fluidsynth -g 0.7 -F "$out" "$1" "$2" && vlc "$out"
-#fluidsynth -g 0.7 -F "$out" samples/katy/solfege-katy.sf2 "$1" && vlc "$out"
+fluidsynth -g 0.7 -F "$out" "$1" "$2" && (vlc "$out" &)
