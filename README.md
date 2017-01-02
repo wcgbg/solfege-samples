@@ -18,7 +18,7 @@ It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Soto
 
 **Sample song**
 * [Twinkle twinkle little star](https://wcgbg.github.io/solfege-samples/samples/daisy/songs/twinkle.ogg)
-* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/daisy/songs/Minuet%20in%20G%20Major.ogg)
+* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/daisy/songs/minuet-in-g-major.ogg)
 
 **Download**
 * [sf2](https://wcgbg.github.io/solfege-samples/samples/daisy/solfege-daisy.sf2)
@@ -31,11 +31,13 @@ It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Soto
 
 **Sample song**
 * [Twinkle twinkle little star](https://wcgbg.github.io/solfege-samples/samples/chengu/songs/twinkle.ogg)
-* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/chengu/songs/Minuet%20in%20G%20Major.ogg)
+* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/chengu/songs/minuet-in-g-major.ogg)
 
 **Download**
 * [sf2](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.sf2)
+* [sf2 (octave transpose)](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.12.sf2)
 * [gig](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.gig)
+* [gig (octave transpose)](https://wcgbg.github.io/solfege-samples/samples/chengu/solfege-chengu.12.gig)
 
 # Jennifer (female)
 Jennifer is the author's wife. She is an amateur singer.
@@ -44,7 +46,7 @@ It contains [Sotorrio](https://en.wikipedia.org/wiki/Solf%C3%A8ge#cite_note-Soto
 
 **Sample song**
 * [Twinkle twinkle little star](https://wcgbg.github.io/solfege-samples/samples/jennifer/songs/twinkle.ogg)
-* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/jennifer/songs/Minuet%20in%20G%20Major.ogg)
+* [Minuet in G Major](https://wcgbg.github.io/solfege-samples/samples/jennifer/songs/minuet-in-g-major.ogg)
 
 **Download**
 * [sf2](https://wcgbg.github.io/solfege-samples/samples/jennifer/solfege-jennifer.sf2)
